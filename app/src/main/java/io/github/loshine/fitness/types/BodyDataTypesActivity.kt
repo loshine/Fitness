@@ -1,7 +1,9 @@
-package io.github.loshine.fitness
+package io.github.loshine.fitness.types
 
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
+import io.github.loshine.fitness.FitnessDataType
+import io.github.loshine.fitness.buildFitnessOptions
 
 class BodyDataTypesActivity : CommonDataTypesActivity() {
     override val data: List<String> = listOf(

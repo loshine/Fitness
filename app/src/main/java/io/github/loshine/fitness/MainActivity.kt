@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import io.github.loshine.fitness.types.*
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -34,6 +35,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         when (text) {
             FitnessDataType.Activity.name -> fitSignIn(FitnessDataType.Activity)
             FitnessDataType.Body.name -> fitSignIn(FitnessDataType.Body)
+            FitnessDataType.Location.name -> fitSignIn(FitnessDataType.Location)
+            FitnessDataType.Nutrition.name -> fitSignIn(FitnessDataType.Nutrition)
+//            FitnessDataType.Sleep.name -> fitSignIn(FitnessDataType.Sleep)
+            FitnessDataType.Health.name -> fitSignIn(FitnessDataType.Health)
         }
     }
 
@@ -61,6 +66,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val destination = when (requestCode) {
             FitnessDataType.Activity.ordinal -> ActivityDataTypesActivity::class.java
             FitnessDataType.Body.ordinal -> BodyDataTypesActivity::class.java
+            FitnessDataType.Location.ordinal -> LocationDataTypesActivity::class.java
+            FitnessDataType.Nutrition.ordinal -> NutritionDataTypesActivity::class.java
+//            FitnessDataType.Sleep.ordinal -> SleepDataTypesActivity::class.java
+            FitnessDataType.Health.ordinal -> HealthDataTypesActivity::class.java
             else -> ActivityDataTypesActivity::class.java
         }
         startActivity(destination)

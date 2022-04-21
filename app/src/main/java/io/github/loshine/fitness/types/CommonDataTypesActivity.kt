@@ -1,4 +1,4 @@
-package io.github.loshine.fitness
+package io.github.loshine.fitness.types
 
 import android.os.Bundle
 import android.util.Log
@@ -8,10 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataPoint
+import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import io.github.loshine.fitness.LogActivity
+import io.github.loshine.fitness.R
+import io.github.loshine.fitness.SimpleTextAdapter
+import io.github.loshine.fitness.TAG
+import java.text.DateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
@@ -39,10 +46,10 @@ abstract class CommonDataTypesActivity : AppCompatActivity(R.layout.activity_com
     }
 
     private fun readDataByName(text: String) {
-        readData(getDataTypeByName(text))
+        readData(text, getDataTypeByName(text))
     }
 
-    private fun readData(dataType: DataType) {
+    private fun readData(text: String, dataType: DataType) {
         // Read the data that's been collected throughout the past week.
         val endTime = LocalDate.now().atTime(LocalTime.MIN).atZone(ZoneId.systemDefault())
         val startTime = endTime.minusWeeks(1)
@@ -71,25 +78,48 @@ abstract class CommonDataTypesActivity : AppCompatActivity(R.layout.activity_com
             )
         ).readData(readRequest)
 //            .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
-            .addOnSuccessListener { response -> printData(response) }
+            .addOnSuccessListener { response -> printData(text, response) }
             .addOnFailureListener { e ->
                 Log.w(TAG, "There was a problem getting the step count.", e)
             }
     }
 
-    private fun printData(dataReadResult: DataReadResponse) {
-        // [START parse_read_data_result]
-        // If the DataReadRequest object specified aggregated data, dataReadResult will be returned
-        // as buckets containing DataSets, instead of just DataSets.
+    private fun printData(text: String, dataReadResult: DataReadResponse) {
+        val builder = StringBuilder()
         if (dataReadResult.buckets.isNotEmpty()) {
             Log.i(TAG, "Number of returned buckets of DataSets is: " + dataReadResult.buckets.size)
             for (bucket in dataReadResult.buckets) {
-                bucket.dataSets.forEach { dumpDataSet(it) }
+                bucket.dataSets.forEach { dumpDataSet(builder, it) }
             }
         } else if (dataReadResult.dataSets.isNotEmpty()) {
             Log.i(TAG, "Number of returned DataSets is: " + dataReadResult.dataSets.size)
-            dataReadResult.dataSets.forEach { dumpDataSet(it) }
+            dataReadResult.dataSets.forEach { dumpDataSet(builder, it) }
         }
-        // [END parse_read_data_result]
+        LogActivity.start(this, text, builder.toString())
     }
+
+
+    // [START parse_dataset]
+    private fun dumpDataSet(builder: StringBuilder, dataSet: DataSet) {
+        Log.i(TAG, "Data returned for Data type: ${dataSet.dataType.name}")
+
+        for (dp in dataSet.dataPoints) {
+//            Log.i(TAG, "Data point:")
+//            Log.i(TAG, "\tType: ${dp.dataType.name}")
+//            Log.i(TAG, "\tStart: ${dp.getStartTimeString()}")
+//            Log.i(TAG, "\tEnd: ${dp.getEndTimeString()}")
+//            builder.append("\n\nStart: ${dp.getStartTimeString()} to End: ${dp.getEndTimeString()}")
+            builder.append("\n\nDate: ${dp.getStartTimeString()}")
+            dp.dataType.fields.forEach {
+//                Log.i(TAG, "\tField: ${it.name} Value: ${dp.getValue(it)}")
+                builder.append("\n${it.name}: ${dp.getValue(it)}")
+            }
+        }
+    }
+
+    private fun DataPoint.getStartTimeString(): String = DateFormat.getDateInstance()
+        .format(this.getStartTime(TimeUnit.MILLISECONDS))
+
+    private fun DataPoint.getEndTimeString(): String = DateFormat.getDateTimeInstance()
+        .format(this.getEndTime(TimeUnit.MILLISECONDS))
 }

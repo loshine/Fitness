@@ -23,8 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityDataTypesActivity" />
-        <activity android:name=".BodyDataTypesActivity" />
+        <activity android:name=".types.ActivityDataTypesActivity" />
+        <activity android:name=".types.BodyDataTypesActivity" />
+        <activity android:name=".types.LocationDataTypesActivity" />
+        <activity android:name=".types.NutritionDataTypesActivity" />
+        <activity android:name=".types.HealthDataTypesActivity" />
         <activity android:name=".LogActivity" />
     </application>
 

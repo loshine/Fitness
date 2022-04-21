@@ -2,9 +2,10 @@ package io.github.loshine.fitness
 
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
+import com.google.android.gms.fitness.data.HealthDataTypes
 
 enum class FitnessDataType {
-    Activity, Body, Location, Nutrition, Sleep, Health
+    Activity, Body, Location, Nutrition, Health
 }
 
 fun FitnessDataType.buildFitnessOptions(): FitnessOptions {
@@ -27,6 +28,31 @@ fun FitnessDataType.buildFitnessOptions(): FitnessOptions {
             DataType.TYPE_HEART_RATE_BPM,
             DataType.TYPE_HEIGHT,
             DataType.TYPE_WEIGHT,
+        )
+        FitnessDataType.Location -> listOf(
+            DataType.TYPE_CYCLING_WHEEL_RPM,
+            DataType.TYPE_CYCLING_WHEEL_REVOLUTION,
+            DataType.TYPE_DISTANCE_DELTA,
+            DataType.TYPE_LOCATION_SAMPLE,
+            DataType.TYPE_SPEED,
+        )
+        FitnessDataType.Nutrition -> listOf(
+            DataType.TYPE_HYDRATION,
+            DataType.TYPE_NUTRITION,
+        )
+//        FitnessDataType.Sleep -> listOf(
+//            DataType.TYPE_SLEEP_SEGMENT,
+//        )
+        FitnessDataType.Health -> listOf(
+            HealthDataTypes.TYPE_BLOOD_GLUCOSE,
+            HealthDataTypes.TYPE_BLOOD_PRESSURE,
+            HealthDataTypes.TYPE_BODY_TEMPERATURE,
+            HealthDataTypes.TYPE_CERVICAL_MUCUS,
+            HealthDataTypes.TYPE_CERVICAL_POSITION,
+            HealthDataTypes.TYPE_MENSTRUATION,
+            HealthDataTypes.TYPE_OVULATION_TEST,
+            HealthDataTypes.TYPE_OXYGEN_SATURATION,
+            HealthDataTypes.TYPE_VAGINAL_SPOTTING,
         )
         else -> listOf()
     }
