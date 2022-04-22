@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
      * @param requestCode The request code corresponding to the action to perform after sign in.
      */
     private fun fitSignIn(fitnessDataType: FitnessDataType) {
-        val options = fitnessDataType.buildFitnessOptions()
+        val options = fitnessDataType.buildLoginOptions()
         if (oAuthPermissionsApproved(options)) {
             performAction(fitnessDataType.ordinal)
         } else {
